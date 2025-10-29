@@ -23,7 +23,7 @@ const UpDeatUser = () => {
     .then(res => res.json())
     .then(data => {
         // console.log("Updeat Data Now", data)
-        if(data. modifiedCount){
+        if(data.modifiedCount){
             alert("Successfully Updeat User");
         }
     })

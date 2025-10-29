@@ -1,4 +1,5 @@
 import React, { use, useState } from "react";
+import { Link } from "react-router";
 
 const Users = ({ promiseData }) => {
   const asdhd = use(promiseData);
@@ -25,6 +26,7 @@ const Users = ({ promiseData }) => {
           creatUser._id = data.insertedId;
           const newAddUser = [...user, creatUser];
           setUser(newAddUser);
+          e.target.reset();
         }
       });
   };
@@ -57,7 +59,9 @@ const Users = ({ promiseData }) => {
       <div>
         {user.map((item) => (
           <p key={item._id}>
-            Name : {item.name} Email : {item.email}
+            Name : {item.name} Email : {item.email}{" "}
+            <Link to={`/userDetlise/${item._id}`}>Detlise</Link> {"   "}
+            <Link to={`/updeat/${item._id}`}>Edit</Link>
             <button onClick={() => handelDelete(item._id)}>x</button>
           </p>
         ))}

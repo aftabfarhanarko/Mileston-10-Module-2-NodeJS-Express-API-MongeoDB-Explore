@@ -8,8 +8,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// LgQR_AnC2r5@kj9
-//pricktiseUser
+
 
 app.get("/", (req, res) => {
   res.send("This is my Pricktise Server");
@@ -32,10 +31,20 @@ async function run() {
     await client.connect();
     const secendDB = client.db("secendDB");
     const myCollectyions = secendDB.collection("items");
+
+    // getAll data from database
     app.get("/user", async (req, res) => {
       const coursor = myCollectyions.find();
       const allItem = await coursor.toArray();
       res.send(allItem);
+    });
+
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await myCollectyions.findOne(query);
+      res.send(result);
+      console.log(result);
     });
 
     // post items database
@@ -45,14 +54,32 @@ async function run() {
       res.send(result);
     });
 
+    // patch
+    app.patch("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const users = req.body;
+      const setUser = {
+        $set: {
+          name: users.name,
+          email: users.email,
+        },
+      };
+      const option = {};
 
+      const result = await myCollectyions.updateOne(query, setUser, option);
+      console.log(users);
+      res.send(result);
+    });
+
+    //
     app.delete("/user/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = {_id: new ObjectId(id)};
-        const myDelet = await myCollectyions.deleteOne(query)
-        res.send(myDelet);
-        console.log(id)
-    })
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const myDelet = await myCollectyions.deleteOne(query);
+      res.send(myDelet);
+      console.log(id);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
