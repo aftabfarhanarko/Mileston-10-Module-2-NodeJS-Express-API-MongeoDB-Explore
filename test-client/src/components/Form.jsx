@@ -1,12 +1,12 @@
 import React, { use, useState } from "react";
 import AddUser from "./AddUser";
+import { toast, ToastContainer } from "react-toastify";
 
 const promiseUser = fetch("http://localhost:3000/user").then((res) =>
   res.json()
 );
 const Form = () => {
   const creatUser = use(promiseUser);
-  console.log(creatUser);
   const [user, setUser] = useState(creatUser);
 
   const handelSubmite = (e) => {
@@ -29,6 +29,8 @@ const Form = () => {
           userData._id = data.insertedId;
           const newArray = [...user, userData];
           setUser(newArray);
+          toast.success("Your User Creat Successfully Now.!");
+          e.target.reset();
         }
       });
   };
@@ -39,7 +41,7 @@ const Form = () => {
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Create User
         </h2>
-
+         
         <form onSubmit={handelSubmite} className="space-y-4 h-[310px]">
           {/* Name */}
           <div>
@@ -83,9 +85,16 @@ const Form = () => {
           </button>
         </form>
       </div>
+            <ToastContainer/>
+
       <div className="grid  md:grid-cols-2 lg:grid-cols-3 gap-8">
         {user.map((items) => (
-          <AddUser items={items} key={items._id}></AddUser>
+          <AddUser
+            user={user}
+            setUser={setUser}
+            items={items}
+            key={items._id}
+          ></AddUser>
         ))}
       </div>
     </div>

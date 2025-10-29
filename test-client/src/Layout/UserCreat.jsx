@@ -2,6 +2,8 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Form from "../components/Form";
+import { ToastContainer } from "react-toastify";
+
 
 const UserCreat = () => {
   return (
@@ -16,6 +18,7 @@ const UserCreat = () => {
       <footer>
         <Footer></Footer>
       </footer>
+      <ToastContainer />
     </div>
   );
 };
