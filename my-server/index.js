@@ -42,6 +42,17 @@ async function run() {
       res.send(allData);
     });
 
+    // get one data from findOne() mongodb database
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query ={_id: new ObjectId(id)};
+
+      const result =  await myCollection.findOne(query);
+      res.send(result);
+      console.log(result);
+    })
+
+
     // set all APIS hear add now
     app.post("/user", async (req, res) => {
       const newUsers = req.body;
@@ -50,13 +61,30 @@ async function run() {
       res.send(result);
     });
 
+    // updet PATCH
+    app.patch("/user/:id", async (req,res) => {
+      const id = req.params.id;
+      const usera = req.body;
+      const query = {_id : new ObjectId(id)}
+      const updeatUser = {
+        $set: {
+          name:usera.name,
+          email: usera.email
+        }
+      }
+      const options = {upsert: true}
+      const result = await myCollection.updateOne(query, updeatUser, options)
+      console.log(query)
+      res.send(result);
+    })
+
     // deleat item database
     app.delete("/user/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
-      const result = await myCollection.deleteOne(query)
+      const query = { _id: new ObjectId(id) };
+      const result = await myCollection.deleteOne(query);
       res.send(result);
-      console.log("This Delete Id : ",id);
+      console.log("This Delete Id : ", id);
     });
 
     await client.db("admin").command({ ping: 1 });
@@ -67,7 +95,6 @@ async function run() {
     // await client.close();
   }
 }
-
 
 run().catch(console.dir);
 

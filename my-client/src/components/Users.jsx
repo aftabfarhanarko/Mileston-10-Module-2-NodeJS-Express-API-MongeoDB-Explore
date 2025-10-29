@@ -1,4 +1,5 @@
 import React, { use, useState } from "react";
+import { Link } from "react-router";
 
 const Users = ({ promiseData }) => {
   const convartData = use(promiseData);
@@ -61,6 +62,9 @@ const Users = ({ promiseData }) => {
         {usera.map((item) => (
           <p key={item._id}>
             Name : {item.name} ! Email : {item.email}
+            {"  "}
+            <Link to={`/usersDetlise/${item._id}`}>detlise</Link>{"  "}
+            <Link to={`/edit/${item._id}`}>Updeat</Link>
             <button onClick={() => handelDeleat(item._id)}>X</button>
           </p>
         ))}
